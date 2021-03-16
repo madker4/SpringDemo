@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Customer</title>
+</head>
+<body>
+
+<form th:method="PATCH" th:action="@{/customers/{id}(id=${customer.getCustomerId()})}" th:object="${customer}">
+    <label th:text="${customer.getCustomerId()}">ID</label>
+    <label for="name">Name: </label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    <br/>
+    <label for="surname">Surname: </label>
+    <input type="text" th:field="*{surname}" id="surname"/>
+    <div style="color: red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+    <br/>
+    <label for="age">Age: </label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
+    <br/>
+    <label for="email">email: </label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    <br/>
+    <label for="gender">Gender: </label>
+    <select class="form-control" th:field="*{gender}" id="gender">
+        <option th:each="gen : ${genders}"
+                th:value="${gen}"
+                th:text="${gen}">
+        </option>
+    </select>
+    <br/>
+    <div style="color: red" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></div>
+    <input type="submit" value="Update!">
+</form>
+
+</body>
+</html>

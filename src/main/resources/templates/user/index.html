@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customers</title>
+</head>
+<style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+        overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+        font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<body>
+<p>
+<a href="\users\outterUsers">Get Outter user!</a>
+</p>
+<p>
+    <a href="\users\new">New user</a>
+</p>
+<br/>
+<hr/>
+
+<table class="tg">
+    <tr>
+        <td>id</td>
+        <td>name</td>
+        <td>username</td>
+        <td>gender</td>
+        <td>email</td>
+        <td>phone</td>
+        <td>website</td>
+        <td>zipcode</td>
+        <td>city</td>
+        <td>street</td>
+        <td>suite</td>
+    </tr>
+    <tr th:each="usr : ${users}">
+        <td><a th:href="@{/users/{id}(id=${usr.getId()})}"
+               th:text="${usr.getId()}">id</a></td>
+        <td th:text="${usr.getName()}"></td>
+        <td th:text="${usr.getUsername()}"></td>
+        <td th:text="${usr.getGender()}"></td>
+        <td th:text="${usr.getEmail()}"></td>
+        <td th:text="${usr.getPhone()}"></td>
+        <td th:text="${usr.getWebsite()}"></td>
+        <td th:text="${usr.getZipcode()}"></td>
+        <td th:text="${usr.getCity()}"></td>
+        <td th:text="${usr.getStreet()}"></td>
+        <td th:text="${usr.getSuite()}"></td>
+
+    </tr>
+</table>
+
+</div>
+
+</body>
+</html>
