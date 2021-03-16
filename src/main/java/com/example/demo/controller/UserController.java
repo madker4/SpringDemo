@@ -6,6 +6,7 @@ import com.example.demo.entity.Gender;
 import com.example.demo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +49,8 @@ public class UserController {
         return "redirect:/users";
     }
 
+
+
     @GetMapping("/{id}")
     public String show(@PathVariable("id") Integer id
                        ,@RequestParam(name = "title",required = false,defaultValue = "") String title
@@ -67,17 +70,19 @@ public class UserController {
     public String show(@PathVariable("id") Integer id
                        ,@PathVariable("page") Integer page
             ,@RequestParam(name = "title",required = false,defaultValue = "") String title
-            ,@RequestParam(name = "sort",required = false,defaultValue = "") String sort
+            ,@RequestParam(name = "sort",required = false,defaultValue = "id") String sort
             , Model model)
     {
-
+        Integer prevPage = page - 1 >= 0 ? page - 1 : 0;
         model.addAttribute("user", userService.show(id));
+        model.addAttribute("nextPage",page + 1);
+        model.addAttribute("previousPage",prevPage.toString());
+        Pageable pageable = PageRequest.of(page,50,Sort.Direction.ASC,sort);
         if (title.isBlank())
-        {model.addAttribute("posts", postService.findByUserId(id, Sort.by(Sort.Direction.ASC, sort),
-                PageRequest.of(page, 50)));
+        {model.addAttribute("posts", postService.findByUserId(id, pageable));
         }
         else
-        {model.addAttribute("posts", postService.findPostTitleLike(id,title));}
+        {model.addAttribute("posts", postService.findPostTitleLike(id,title,pageable));}
 
         return "user/show";
     }

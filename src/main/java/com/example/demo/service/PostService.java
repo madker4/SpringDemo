@@ -26,9 +26,9 @@ public class PostService {
         this.restTemplate = restTemplate;
     }
 
-    public List<Post> findByUserId(Integer id, Sort sort, Pageable pageable)
+    public List<Post> findByUserId(Integer id,Pageable pageable)
     {
-        return postRepository.findByUserId(id, sort, pageable);
+        return postRepository.findByUserId(id,pageable);
     }
 
     public List<Post> findByUserId(Integer id)
@@ -39,6 +39,11 @@ public class PostService {
     public List<Post> findPostTitleLike(Integer id, String title)
     {
         return postRepository.findByUserIdAndTitleContains(id,title);
+    }
+
+    public List<Post> findPostTitleLike(Integer id, String title,Pageable pageable)
+    {
+        return postRepository.findByUserIdAndTitleContains(id,title,pageable);
     }
 
     public boolean save(Post post) {
