@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Post;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 import com.example.demo.entity.Gender;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -54,15 +58,16 @@ public class UserController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") Integer id
                        ,@RequestParam(name = "title",required = false,defaultValue = "") String title
-                       ,@RequestParam(name = "sort",required = false,defaultValue = "") String sort
+                       ,@PageableDefault(value = 0,size = 50) Pageable pageable
+                       ,@SortDefault(caseSensitive = false) Sort sort
             , Model model)
     {
 
         model.addAttribute("user", userService.show(id));
         if (title.isBlank())
-        {model.addAttribute("posts", postService.findByUserId(id));}
+        {model.addAttribute("posts", postService.findByUserId(id,pageable));}
         else
-        {model.addAttribute("posts", postService.findPostTitleLike(id,title));}
+        {model.addAttribute("posts", postService.findPostTitleLike(id,title,pageable));}
 
         return "user/show";
     }
@@ -74,16 +79,26 @@ public class UserController {
             , Model model)
     {
         Integer prevPage = page - 1 >= 0 ? page - 1 : 0;
+        Integer nextPage = page + 1;
         model.addAttribute("user", userService.show(id));
-        model.addAttribute("nextPage",page + 1);
-        model.addAttribute("previousPage",prevPage.toString());
+        model.addAttribute("nextPage",nextPage);
+        model.addAttribute("previousPage",prevPage);
+        model.addAttribute("sort",sort);
+        model.addAttribute("title",title);
         Pageable pageable = PageRequest.of(page,50,Sort.Direction.ASC,sort);
+
+        List<Post> posts = Collections.emptyList();
         if (title.isBlank())
-        {model.addAttribute("posts", postService.findByUserId(id, pageable));
+        {
+            posts = postService.findByUserId(id, pageable);
+
         }
         else
-        {model.addAttribute("posts", postService.findPostTitleLike(id,title,pageable));}
-
+        {
+            posts = postService.findPostTitleLike(id,title,pageable);
+        }
+        model.addAttribute("posts", posts);
+//        model.addAttribute("pageCnt", posts.size() /50);
         return "user/show";
     }
 

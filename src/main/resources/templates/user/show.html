@@ -15,8 +15,12 @@
 <body>
 <p th:text="${user.toString()}"></p>
 <br/>
-<a th:href="@{/users/{id}/post/${previousPage}}">previousPage</a>
-<a th:href="@{/users/{id}/post/${nextPage}}">nextPage</a>
+<!--<a th:href="@{/users/{id}(id=${user.getId()},prev=${previousPage}, title=${title}, sort=${sort})}">previousPage</a>-->
+<!--<a th:href="@{/users/{id}(id=${user.getId()},next=${nextPage}, title=${title}, sort=${sort})}">nextPage</a>-->
+<br/>
+<p th:text="/post/ etc :"></p>
+<a th:href="@{/users/{id}/post/{prev}(id=${user.getId()},prev=${previousPage}, title=${title}, sort=${sort})}">previousPage</a>
+<a th:href="@{/users/{id}/post/{next}(id=${user.getId()},next=${nextPage}, title=${title}, sort=${sort})}">nextPage</a>
 <h2>Posts</h2>
 <table class="tg">
     <tr>
